@@ -1,26 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"golang.org/x/time/rate"
+	"time"
+)
 
 func main() {
-	func() {
-		defer func() {
-			if r := recover(); r != nil {
-				fmt.Println(r)
-				fmt.Println("recovered from panic in outer")
-			}
-		}()
-		invokePanic()              // 内部如果没有使用recover处理panic, 那么对于当前匿名函数来说, invokePanic()是一个panic
-		fmt.Println("after panic") // 不会执行
-	}()
-}
-
-func invokePanic() {
-	defer fmt.Println("after invoke panic")
-	//defer func() {
-	//	if r := recover(); r != nil {
-	//		fmt.Println("recovered from panic in inner")
-	//	}
-	//}()
-	panic("panic")
+	limiter := rate.NewLimiter(rate.Every(time.Second), 10)
+	fmt.Println("after limiter")
+	for i := 0; i < 100; i++ {
+		fmt.Println(limiter.Allow())
+		time.Sleep(20 * time.Millisecond)
+	}
 }
