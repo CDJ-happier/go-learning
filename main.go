@@ -2,15 +2,18 @@ package main
 
 import (
 	"fmt"
-	"golang.org/x/time/rate"
-	"time"
+	"go-repo/ds"
 )
 
 func main() {
-	limiter := rate.NewLimiter(rate.Every(time.Second), 10)
-	fmt.Println("after limiter")
-	for i := 0; i < 100; i++ {
-		fmt.Println(limiter.Allow())
-		time.Sleep(20 * time.Millisecond)
+	capacity := 10
+	lruCache := ds.NewLRUCache(capacity)
+	for i := 0; i < capacity; i++ {
+		lruCache.Add(fmt.Sprintf("key.%d", i), i)
 	}
+	fmt.Println(lruCache.Keys())
+	for i := 0; i < capacity; i += 2 {
+		lruCache.Add(fmt.Sprintf("key.%d", i), i+2)
+	}
+	fmt.Println(lruCache.Keys())
 }

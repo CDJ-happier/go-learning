@@ -4,22 +4,22 @@ import (
 	"math/rand"
 )
 
-type node struct {
+type skipNode struct {
 	key  int
 	val  interface{}
-	next []*node
+	next []*skipNode
 }
 
 type SkipList struct {
-	head *node
+	head *skipNode
 }
 
 // NewSkipList ...
 func NewSkipList() *SkipList {
 	return &SkipList{
-		head: &node{
+		head: &skipNode{
 			key:  -1,
-			next: make([]*node, 0),
+			next: make([]*skipNode, 0),
 		},
 	}
 }
@@ -34,7 +34,7 @@ func randomLevel() int {
 	return level
 }
 
-func (s *SkipList) search(key int) *node {
+func (s *SkipList) search(key int) *skipNode {
 	cur := s.head
 	for level := len(cur.next) - 1; level >= 0; level-- {
 		for cur.next[level] != nil && cur.next[level].key < key {
@@ -59,10 +59,10 @@ func (s *SkipList) Put(key int, val interface{}) {
 		n.val = val
 	}
 	curLevel := randomLevel()
-	newNode := &node{
+	newNode := &skipNode{
 		key:  key,
 		val:  val,
-		next: make([]*node, curLevel+1),
+		next: make([]*skipNode, curLevel+1),
 	}
 	// 如果新节点的level大于当前链表的level，则需要增加链表的level
 	for len(s.head.next)-1 < curLevel {
@@ -102,7 +102,7 @@ func (s *SkipList) Delete(key int) {
 }
 
 // ceiling 返回大于等于key的最小值
-func (s *SkipList) ceiling(key int) *node {
+func (s *SkipList) ceiling(key int) *skipNode {
 	cur := s.head
 	for level := len(cur.next) - 1; level >= 0; level-- {
 		for cur.next[level] != nil && cur.next[level].key < key {
@@ -116,7 +116,7 @@ func (s *SkipList) ceiling(key int) *node {
 }
 
 // floor 返回小于等于key的最大值
-func (s *SkipList) floor(key int) *node {
+func (s *SkipList) floor(key int) *skipNode {
 	cur := s.head
 	for level := len(cur.next) - 1; level >= 0; level-- {
 		for cur.next[level] != nil && cur.next[level].key < key {
