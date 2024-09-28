@@ -30,3 +30,28 @@ func TestQuickSort(t *testing.T) {
 		fmt.Println(alphas[i])
 	}
 }
+
+func TestHeapSort(t *testing.T) {
+	nums := []int{2, 3, 3, 8, 1, 4, 5}
+	HeapSort[int](nums, func(a, b int) bool {
+		return a < b
+	})
+	for i := 0; i < len(nums); i++ {
+		fmt.Println(nums[i])
+	}
+	alphas := []string{"bbc", "ab", "abed", "abd"}
+	HeapSort[string](alphas, func(a, b string) bool {
+		m, n := len(a), len(b)
+		for i := 0; i < m && i < n; i++ {
+			if a[i] < b[i] {
+				return true
+			} else if a[i] > b[i] {
+				return false
+			}
+		}
+		return m < n
+	})
+	for i := 0; i < len(alphas); i++ {
+		fmt.Println(alphas[i])
+	}
+}
