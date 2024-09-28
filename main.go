@@ -16,4 +16,9 @@ func main() {
 		lruCache.Add(fmt.Sprintf("key.%d", i), i+2)
 	}
 	fmt.Println(lruCache.Keys())
+	arr := make([]string, 0)
+	for i := 0; i < capacity; i++ {
+		arr = append(arr, fmt.Sprintf("key.%d", i))
+	}
+	fmt.Println(lruCache.Get(arr[0]))
 }
