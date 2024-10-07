@@ -66,16 +66,37 @@ func HeapSort[T comparable](slice []T, less LessFunc[T]) {
 // 把节点i进行下层操作. 下层就是当前节点不满足大根堆/小根堆时(除根节点外, 所有节点都大于/小于左右子节点),
 // 将节点i与左右子节点中的最大/最小子节点进行交换.
 func siftDown[T comparable](slice []T, heapSize, i int, less LessFunc[T]) {
-	// 直到叶子节点才停止下层操作
-	for i <= heapSize/2-1 {
-		largerIndex := 2*i + 1
+	// 直到叶子节点才停止下层操作。有问题
+	//for i <= heapSize/2-1 {
+	//	largerIndex := 2*i + 1
+	//	rightIndex := 2*i + 2
+	//	// 此处是把larger元素往上提, 因此构建的是大根堆.
+	//	if rightIndex < heapSize && !less(slice[rightIndex], slice[largerIndex]) {
+	//		largerIndex = rightIndex
+	//	}
+	//	// swap slice[i] and slice[smallerIndex]
+	//	slice[i], slice[largerIndex] = slice[largerIndex], slice[i]
+	//	i = largerIndex
+	//}
+	for {
+		leftIndex := 2*i + 1
 		rightIndex := 2*i + 2
-		// 此处是把larger元素往上提, 因此构建的是大根堆.
-		if rightIndex < heapSize && !less(slice[rightIndex], slice[largerIndex]) {
+		largerIndex := i
+
+		if leftIndex < heapSize && less(slice[i], slice[leftIndex]) {
+			largerIndex = leftIndex
+		}
+
+		if rightIndex < heapSize && less(slice[largerIndex], slice[rightIndex]) {
 			largerIndex = rightIndex
 		}
-		// swap slice[i] and slice[smallerIndex]
-		slice[i], slice[largerIndex] = slice[largerIndex], slice[i]
-		i = largerIndex
+
+		if largerIndex != i {
+			slice[i], slice[largerIndex] = slice[largerIndex], slice[i]
+			i = largerIndex
+		} else {
+			// 如果当前节点已经满足大根堆/小根堆, 则停止下层操作
+			break
+		}
 	}
 }
