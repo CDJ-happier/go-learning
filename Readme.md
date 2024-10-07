@@ -1,3 +1,5 @@
+[toc]
+
 # Go Repo
 
 [使用singlefilght解决缓存击穿](./singleflight_test.go)
@@ -25,3 +27,18 @@ $$
 2. 针对第i个hash，我们加上一个偏移，如base += i * 101；
 3. 最后index = base % m；
 
+## Data Structure
+
+[LRU](./ds/lru.go)：使用一个双向链表（带虚拟头节点）+哈希表实现。哈希表获得O(1)时间复杂度的查询，双向链表用于维护节点的使用时间（逻辑上头节点的next是最新使用的）
+
+[LFU](./ds/lfu.go)：使用一个哈希表实现，key=freq，val=该freq下的节点所组成的链表。每次使用一个节点元素时，从map[freq]链表中移除该元素，并加入到map[freq+1]的链表中。
+
+[优先队列](./ds/priority_queue.go)：基于堆实现，利用数组存储元素，主要有`Push,Pop,Top,Size`几个方法。插入元素时，在尾部插入，并与父节点比较是否满足堆结构要求，否则交换（Up）。删除元素时，是删除堆顶元素，然后把堆底元素放到堆顶，并与子节点比较是否满足对结构要求，否则交换（Down）。
+
+使用数组保存堆元素的一些性质：堆大小为size。非叶子节点i满足0≤i≤size/2-1，节点i的left=2i+1, right=2i+2，parent=i/2-1。
+
+[跳表](./ds/skiplist.go)：一种概率数据结构，空间换时间。
+
+## Algorithm
+
+[排序算法](./algorithm/sort.go)：快速排序、堆排序（堆化、下沉）
