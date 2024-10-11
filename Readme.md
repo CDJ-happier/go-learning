@@ -27,6 +27,12 @@ $$
 2. 针对第i个hash，我们加上一个偏移，如base += i * 101；
 3. 最后index = base % m；
 
+[基于context实现带过期时间的单机锁](./expirelock/main.go)
+
+context用于超时解锁。
+
+
+
 ## Data Structure
 
 [LRU](./ds/lru.go)：使用一个双向链表（带虚拟头节点）+哈希表实现。哈希表获得O(1)时间复杂度的查询，双向链表用于维护节点的使用时间（逻辑上头节点的next是最新使用的）
