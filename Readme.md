@@ -49,6 +49,8 @@ type Channel[T any] struct {
 }
 ```
 
+[使用viper读取配置文件](./config/config.go)
+
 
 
 ## Data Structure
