@@ -31,6 +31,24 @@ $$
 
 context用于超时解锁。
 
+[手写Go channel](./ds/channel.go)
+
+要求：并发安全、queue-like action、send、receive、unbuffered&buffered。[ref](https://dev.to/eyo000000/a-straightforward-guide-for-go-channel-3ba2)
+
+除了基础实现外，ref中通过一个很巧妙的方式解决capacity=0(unbuffered channel)时导致的deadlock。由于unbuffered，send没有空间写，因此睡眠、receive因为没有数据读，因此睡眠，导致了死锁。一个解决方案就是在receive时，将capacity++，然后cond.Notify通知所有因capacity=0导致的send goroutine，然后读取后再将capacity自减。
+
+```go
+// Channel implement the Go channel
+type Channel[T any] struct {
+	queue    *list.List // store the data
+	capacity int        // channel capacity
+    // wait when no space to send for sending goroutine
+    // wait when no data to receive for receive goroutine
+	cond     *sync.Cond // lock, and producer&consumer architecture
+	closed   bool       // channel closed status
+}
+```
+
 
 
 ## Data Structure
